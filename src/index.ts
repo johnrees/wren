@@ -1,6 +1,7 @@
 import * as Clipper from "./patterns/clipper";
 import * as Point from "./patterns/geometry/point";
 import * as List from "./patterns/core/list";
+const _ = require("lodash/fp");
 
 const originalPoints: [number, number][] = [
   [0, 0],
@@ -33,7 +34,21 @@ const b = originalPairs.reduce((arr, curr) => {
   arr.push(o);
   return arr;
 }, []);
-console.log(b);
+// console.log(b);
+
+const pluck = key => item => item[key];
+
+function calculatePoints(distance) {
+  let points = [];
+  for (let i = 0; i < distance / 2; i += 300) {
+    points.push(i);
+  }
+  return points;
+}
+
+_.flow(_.map(pluck("distance")), _.map(calculatePoints), console.log)(b);
+
+// console.log(b.map(pluck("distance")));
 
 // console.log(points.original)
 // console.log(distances);
