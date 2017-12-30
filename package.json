@@ -14,13 +14,15 @@
     "lodash": "^4.17.4",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "snabbdom": "^0.7.1"
+    "snabbdom": "^0.7.1",
+    "transducers-js": "^0.4.174"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.91",
     "@types/node": "^8.5.2",
     "@types/react": "^16.0.31",
     "@types/react-dom": "^16.0.3",
+    "@types/transducers-js": "^0.4.4",
     "prettier": "^1.9.2",
     "typescript": "^2.6.2"
   }

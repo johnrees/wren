@@ -1,7 +1,26 @@
 import * as Clipper from "./patterns/clipper";
 import * as Point from "./patterns/geometry/point";
 import * as List from "./patterns/core/list";
+import * as Ob from "./patterns/core/object";
+import { map, filter, comp, into, toFn } from "transducers-js";
 const _ = require("lodash/fp");
+
+const bigArr = Array.from(Array(1e2).keys());
+
+const inc = n => n + 1;
+const isEven = n => n % 2 === 0;
+const xf = comp(map(inc), filter(isEven), map(inc));
+console.time("a");
+into([], xf, bigArr);
+console.timeEnd("a");
+
+const apush = (arr, x) => {
+  arr.push(x);
+  return arr;
+};
+console.time("b");
+bigArr.reduce(toFn(xf, apush), []);
+console.timeEnd("b");
 
 const originalPoints: [number, number][] = [
   [0, 0],
@@ -36,8 +55,6 @@ const b = originalPairs.reduce((arr, curr) => {
 }, []);
 // console.log(b);
 
-const pluck = key => item => item[key];
-
 function calculatePoints(distance) {
   let points = [];
   for (let i = 0; i < distance / 2; i += 300) {
@@ -46,23 +63,9 @@ function calculatePoints(distance) {
   return points;
 }
 
-_.flow(_.map(pluck("distance")), _.map(calculatePoints), console.log)(b);
-
-// console.log(b.map(pluck("distance")));
-
-// console.log(points.original)
-// console.log(distances);
-
-// const _ = require("lodash/fp");
-// const snabbdom = require('snabbdom');
-// const patch = snabbdom.init([
-//   require('snabbdom/modules/class').default, // makes it easy to toggle classes
-//   require('snabbdom/modules/props').default, // for setting properties on DOM elements
-//   require('snabbdom/modules/style').default, // handles styling on elements with support for animations
-//   require('snabbdom/modules/eventlisteners').default, // attaches event listeners
-// ]);
-// const h = require('snabbdom/h').default; // helper function for creating vnodes
-// const p = _.flow(
-//   List.loopifyInPairs,
-//   _.map(([start, end]) => Point.distance(start, end))
-// )(points.original);
+// prettier-ignore
+_.flow(
+  _.map(Ob.pluck("distance")),
+  _.map(calculatePoints),
+  console.log
+)(b);
